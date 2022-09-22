@@ -2,6 +2,7 @@
 
 const assert = require('assert');
 const readline = require('readline');
+const colors = require('colors')
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
@@ -28,13 +29,39 @@ const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-const generateHint = () =>  {
-  // your code here
+const generateHint = (guess) =>  {
+  var solutionArray = solution.split("") // 'abcd' => ['a', 'b', 'c', 'd']
+  var guessArray = guess.split("")
+  let correctLetterLocations = 0
+  let correctLetters = 0
+  let targetIndex
+  let hint
+  for (let i = 0; i < guessArray.length; i++) {
+    if (solutionArray[i] === guessArray[i]) {
+        correctLetterLocations++
+        solutionArray[i] = null
+    }
+  }
+    
+  for (let i = 0; i < solutionArray.length; i++) {
+    if (solutionArray.indexOf(guessArray[i]) != -1) {
+      correctLetters++
+    }
+  }
+  hint = `[${guess}] | ${colors.green(correctLetterLocations)}: Correct letter and spot. ${colors.red(correctLetters)}: Correct letter wrong spot.`
+  board.push(hint)
+  if (board.length > 9) {
+    console.log(`${colors.red("YOU LOSE! The solution was: [" + solution + "]")}`)
+  }
 }
 
 const mastermind = (guess) => {
-  solution = 'abcd'; // Comment this out to generate a random solution
-  // your code here
+  // solution = 'abcd'; // Comment this out to generate a random solution
+  if (guess === solution) {
+    console.log("You guessed it!")
+  } else {
+    generateHint(guess)
+  }
 }
 
 
